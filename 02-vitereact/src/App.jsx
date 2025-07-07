@@ -2,11 +2,14 @@
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
-import Class from "./Class"
+import Class from "./Class.jsx"
+import Callme  from './Hello.jsx'
+import addition from './Addition.jsx';
 
+let name = "React";
 function App() {
   // const [count, setCount] = useState(0)
-
+  const result = addition(10, 20);
   return (
     // <>
     //    {/* <div>
@@ -30,8 +33,13 @@ function App() {
     //     Click on the Vite and React logos to learn more
     //   </p> 
 
-    // </> */}
+    // </> */} Fragments
+    <> 
     <Class/>
+    <Callme />
+    {name}
+     <h1>Result of Addition: {result}</h1>
+    </>
     
   )
 }
