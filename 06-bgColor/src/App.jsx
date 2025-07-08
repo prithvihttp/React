@@ -30,7 +30,7 @@ function App() {
         </button>
 
         <button
-          onClick={() => setColor('blue')}
+          onClick={() => setColor('')}
           className="px-6 py-3 rounded-full text-white font-semibold shadow-md hover:scale-105 transition"
           style={{ backgroundColor: 'blue' }}
         >
