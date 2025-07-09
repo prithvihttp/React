@@ -1,45 +1,57 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 function App() {
-  const [lenght, setLength] = useState(6);
+  const [length, setLength] = useState(8);
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
 
+  const passwordRef = useRef(null);
+
   const passwordGenerator = useCallback(() => {
     let pass = "";
-    let str = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    if (numberAllowed) str = str + "012346789";
-    if (charAllowed) str = str + "!@#$%^&**()_+{}|<>?/*-";
+    if (numberAllowed) str += "0123456789";
+    if (charAllowed) str += "!@#$%^&*()_-+={}[]~`*/?";
 
     for (let i = 1; i <= length; i++) {
-      let char = Math.floor(Math.random * str.length + 1);
+      let char = Math.floor(Math.random() * str.length);
       pass += str.charAt(char);
     }
 
     setPassword(pass);
-  }, [lenght, numberAllowed, charAllowed, setPassword]);
+  }, [length, numberAllowed, charAllowed]);
+
+  const copyPasswordToClipboard = useCallback(() => {
+    passwordRef.current?.select();
+    passwordRef.current?.setSelectionRange(0, 20);
+    window.navigator.clipboard.writeText(password);
+  }, [password]);
 
   useEffect(() => {
     passwordGenerator();
-  }, [lenght, numberAllowed, charAllowed, setPassword]);
+  }, [length, numberAllowed, charAllowed]);
 
   return (
-    <div className="min-h-screen min-w-screen  bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
+    <div className="min-h-screen min-w-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-gray-700 rounded-2xl shadow-2xl p-6 space-y-6">
-        <h1 className="text-3xl font-bold text-center text-orange-400">🔐 Password Generator</h1>
+        <h1 className="text-3xl font-bold text-center text-orange-400">
+          🔐 Password Generator
+        </h1>
 
         <div className="flex rounded-lg overflow-hidden shadow-lg">
           <input
             type="text"
             value={password}
+            ref={passwordRef}
             readOnly
             className="w-full p-3 text-lg bg-gray-800 text-white outline-none"
             placeholder="Generated password"
           />
           <button
-            className="bg-orange-400 hover:bg-orange-600 text-white px-4 text-sm font-semibold transition"
+            onClick={copyPasswordToClipboard}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-4 text-sm font-semibold transition"
           >
             Copy
           </button>
@@ -47,7 +59,10 @@ function App() {
 
         <div className="space-y-4 text-white">
           <div className="flex items-center justify-between">
-            <label className="text-sm">Password Length: <span className="font-semibold text-orange-300">{length}</span></label>
+            <label className="text-sm">
+              Password Length:{" "}
+              <span className="font-semibold text-orange-300">{length}</span>
+            </label>
             <input
               type="range"
               min={6}
@@ -59,7 +74,9 @@ function App() {
           </div>
 
           <div className="flex items-center justify-between">
-            <label htmlFor="numberInput" className="text-sm">Include Numbers</label>
+            <label htmlFor="numberInput" className="text-sm">
+              Include Numbers
+            </label>
             <input
               type="checkbox"
               id="numberInput"
@@ -70,7 +87,9 @@ function App() {
           </div>
 
           <div className="flex items-center justify-between">
-            <label htmlFor="characterInput" className="text-sm">Include Symbols</label>
+            <label htmlFor="characterInput" className="text-sm">
+              Include Symbols
+            </label>
             <input
               type="checkbox"
               id="characterInput"
